@@ -42,22 +42,6 @@ def singletons(df,n1,sim,a,b,eps):
         singleton.append(sobol(df,n1,x,sim,a,b,eps))
     return pd.DataFrame(dict(zip(['X1','X2','X3'],singleton)))
 
-def sobol_ipw(df,n1,request,sim,a,b,eps,p):
-    sobol_list = []
-    df1 = df.copy()
-    for x in range(sim):
-        df_pf   = dataset(n1,df1).picked(request,a,b)
-        df1['Y']    =dataset(n1,df1).ishigami(eps)(a,b) / p
-        df_pf['Y'] = dataset(n1,df_pf).ishigami(eps)(a,b) /p
-        sobol_list.append(np.cov(df1.Y,df_pf.Y)[0][1])
-    return sobol_list
-
-def singletons_ipw(df,n1,sim,a,b,eps,p):
-    singleton = []
-    for x in [['X2','X3'],['X1','X3'],['X1','X2']]:
-        singleton.append(sobol_ipw(df,n1,x,sim,a,b,eps,p))
-    return pd.DataFrame(dict(zip(['X1','X2','X3'],singleton)))
-
 
 
 def adjust_box_widths(g, fac):
