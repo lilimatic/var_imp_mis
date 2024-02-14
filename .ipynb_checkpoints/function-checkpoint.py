@@ -33,7 +33,7 @@ def sobol(df,n1,request,sim,a,b,eps):
         df_pf   = dataset(n1,df).picked(request,a,b)
         df1['Y']    =dataset(n1,df1).ishigami(eps)(a,b)
         df_pf['Y'] = dataset(n1,df_pf).ishigami(eps)(a,b)
-        sobol_list.append((np.cov(df1.Y,df_pf.Y)/np.var(df1.Y))[0][1])
+        sobol_list.append((np.cov(df1.Y,df_pf.Y,bias=True)/np.var(df1.Y))[0][1])
     return sobol_list
 
 def singletons(df,n1,sim,a,b,eps):
@@ -42,6 +42,11 @@ def singletons(df,n1,sim,a,b,eps):
         singleton.append(sobol(df,n1,x,sim,a,b,eps))
     return pd.DataFrame(dict(zip(['X1','X2','X3'],singleton)))
 
+def higher_sobols(df,n1,sim,a,b,eps):
+    singleton = []
+    for x in [['X3'],['X1'],['X2'],[]]:
+        singleton.append(sobol(df,n1,x,sim,a,b,eps))
+    return pd.DataFrame(dict(zip(['X1_X2','X2_X3','X1_X3'],singleton)))
 
 
 def adjust_box_widths(g, fac):
