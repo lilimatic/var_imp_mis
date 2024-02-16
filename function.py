@@ -26,6 +26,7 @@ def pi(y,b0,b1):
     lin = b0 + b1 *y 
     return 1/(1+np.exp(-lin))
 
+#Sobol computation
 def sobol(df,n1,request,sim,a,b,eps):
     sobol_list = []
     df1 = df.copy()
@@ -36,6 +37,7 @@ def sobol(df,n1,request,sim,a,b,eps):
         sobol_list.append((np.cov(df1.Y,df_pf.Y,bias=True)/np.var(df1.Y))[0][1])
     return sobol_list
 
+#Sobol index computation by subset 
 def singletons(df,n1,sim,a,b,eps):
     singleton = []
     for x in [['X2','X3'],['X1','X3'],['X1','X2']]:
@@ -48,6 +50,8 @@ def higher_sobols(df,n1,sim,a,b,eps):
         singleton.append(sobol(df,n1,x,sim,a,b,eps))
     return pd.DataFrame(dict(zip(['X1_X2','X2_X3','X1_X3'],singleton)))
 
+
+#From 
 
 def adjust_box_widths(g, fac):
     """
